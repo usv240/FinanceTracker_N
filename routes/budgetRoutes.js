@@ -9,12 +9,18 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.use(authMiddleware.authenticateToken);
 
 // Get all budgets
-router.get('/getAllBudgets', budgetController.getAllBudgets);
+//router.get('/getAllBudgets', budgetController.getAllBudgets);
+
+// Get all budgets or get budgets by month
+router.get('/getAllBudgets/:month?', budgetController.getAllBudgets);
 
 // Add a new budget
 router.post('/', budgetController.addBudget);
 
 // Add a new budget capacity
 router.post('/capacity', budgetCapController.addBudgetCap);
+
+// Add a new budget capacity
+router.get('/capacity', budgetCapController.getBudgetCap);
 
 module.exports = router;

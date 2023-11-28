@@ -16,25 +16,29 @@ const budgetController = {
       console.log('Inside getAllBudgets function'); // Add this line
 
       const username = req.user.username;
-      const { month } = req.query;
+      const { month } = req.params;
 
       let query;
       let queryParams = [username];
       console.log('Query Parameters:', queryParams);
       console.log('month', month);
       if (month) {
-        // Convert month to integer if needed (assuming your database stores months as integers)
         queryParams.push(parseInt(month, 10));
-
-        query = 'SELECT * FROM budget WHERE username = ? AND MONTH(date) = ?';
+        query = 'SELECT budgetname, SUM(budgetnumber) as budgetnumber FROM budget WHERE username = ? AND MONTH(date) = ? GROUP BY budgetname ORDER BY budgetname ASC';
       } else {
-        query = 'SELECT * FROM budget WHERE username = ?';
+        query = 'SELECT budgetname, SUM(budgetnumber) as budgetnumber FROM budget WHERE username = ? GROUP BY budgetname ORDER BY budgetname ASC';
       }
 
       console.log('SQL Query:', query);
       console.log('Query Parameters:', queryParams);
 
       const [budgets] = await pool.execute(query, queryParams);
+
+      if (!budgets || !budgets.length) {
+        return res.status(200).json({ message: 'No budget data available.' });
+      }
+
+      console.log(budgets);
       res.status(200).json({ data: budgets });
     } catch (error) {
       console.error('Error in getAllBudgets:', error);

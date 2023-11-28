@@ -11,8 +11,16 @@ const authenticateToken = async (req, res, next) => {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
 
-  const token = authHeader.split(' ')[1];
-  console.log('Extracted token:', token.authenticateToken);
+  const tokenParts = authHeader.split(' ');
+
+  if (tokenParts.length !== 2) {
+    console.log('Malformed token, authorization denied');
+    return res.status(401).json({ message: 'Malformed token, authorization denied' });
+  }
+
+  const token = tokenParts[1];
+  console.log('Extracted token:', token);
+  console.log('tokenParts:', tokenParts);  // Add this log after defining 'token'
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
