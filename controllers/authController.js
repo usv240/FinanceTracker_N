@@ -1,13 +1,14 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
+const authService = require('../token/token'); // Import authService
 
 const SECRET_KEY = 'your-secret-key';
 const REFRESH_SECRET_KEY = 'your-refresh-secret-key'; // Use a different secret key for refresh tokens
 const saltRounds = 10;
 
 const pool = mysql.createPool({
-  host: 'database-3-instance-1.cccnx8pptmin.us-east-1.rds.amazonaws.com',
+  host: 'nbadprojectfinal.cccnx8pptmin.us-east-1.rds.amazonaws.com',
   user: 'admin',
   password: 'abcde12345',
   database: 'sys',
@@ -38,11 +39,12 @@ const authController = {
       }
 
       // Generate a JWT token for the user
-      const token = jwt.sign({ id: user.id, username: user.Username }, SECRET_KEY, { expiresIn: '1m' });
+      const token = jwt.sign({ id: user.id, username: user.Username }, SECRET_KEY, { expiresIn: '10m' });
 
       // Generate a refresh token for the user
-      const refreshToken = jwt.sign({ id: user.id, username: user.Username }, REFRESH_SECRET_KEY, { expiresIn: '7d' });
-
+      const refreshToken = jwt.sign({ id: user.id, username: user.Username }, REFRESH_SECRET_KEY, { expiresIn: '5m' });
+      console.log('authController token', token);
+      console.log('authController refreshToken', refreshToken);
       res.json({ token, refreshToken });
     } catch (error) {
       console.error('Login error:', error);
@@ -53,17 +55,19 @@ const authController = {
   refreshAccessToken: async (req, res) => {
     try {
       const { refreshToken } = req.body;
-
+  
       // Verify the refresh token
-      const decoded = jwt.verify(refreshToken, REFRESH_SECRET_KEY);
-
-      // Generate a new access token
-      const newAccessToken = jwt.sign({ id: decoded.id, username: decoded.username }, SECRET_KEY, { expiresIn: '1m' });
-
+      const newAccessToken = authService.verifyRefreshToken(refreshToken);
+  
       res.json({ accessToken: newAccessToken });
     } catch (error) {
       console.error('Token refresh error:', error);
-      res.status(401).json({ message: 'Token refresh failed' });
+  
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Refresh token has expired' });
+      }
+  
+      return res.status(401).json({ error: 'Invalid refresh token' });
     }
   },
 
@@ -90,5 +94,18 @@ const authController = {
     }
   },
 };
+const refreshAccessToken = async () => {
+  try {
+    const newToken = await authService.refreshAccessToken();
+    setToken(newToken);
+    localStorage.setItem('token', newToken);
+    console.log('Access token refreshed successfully. New token:', newToken);
+    return newToken;
+  } catch (error) {
+    console.error('Error refreshing access token:', error);
+    logout();
+  }
+};
+
 
 module.exports = authController;
