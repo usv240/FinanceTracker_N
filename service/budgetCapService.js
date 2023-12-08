@@ -1,15 +1,8 @@
 // service/budgetCapService.js
 const mysql = require('mysql2/promise');
+const config = require('./config');
 
-const pool = mysql.createPool({
-  host: 'nbadprojectfinal.cccnx8pptmin.us-east-1.rds.amazonaws.com',
-  user: 'admin',
-  password: 'abcde12345',
-  database: 'sys',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+const pool = config.mysql;
 
 const handleAddBudgetCapacity = async (data) => {
   try {

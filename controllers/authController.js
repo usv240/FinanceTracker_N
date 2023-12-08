@@ -2,20 +2,23 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
 const authService = require('../token/token'); // Import authService
+const config = require('../config');
 
 const SECRET_KEY = 'your-secret-key';
 const REFRESH_SECRET_KEY = 'your-refresh-secret-key'; // Use a different secret key for refresh tokens
 const saltRounds = 10;
 
-const pool = mysql.createPool({
-  host: 'nbadprojectfinal.cccnx8pptmin.us-east-1.rds.amazonaws.com',
-  user: 'admin',
-  password: 'abcde12345',
-  database: 'sys',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
+// const pool = mysql.createPool({
+//   host: 'nbadprojectfinal.cccnx8pptmin.us-east-1.rds.amazonaws.com',
+//   user: 'admin',
+//   password: 'abcde12345',
+//   database: 'sys',
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0
+// });
+//const pool = config.mysql;
+const pool = mysql.createPool(config.mysql);
 
 const authController = {
   login: async (req, res) => {
