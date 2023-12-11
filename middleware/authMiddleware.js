@@ -4,7 +4,6 @@ const { SECRET_KEY } = require('../config');
 
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.header('Authorization');
-  console.log('Authorization Header:', authHeader);
 
   if (!authHeader) {
     console.log('No token, authorization denied');
@@ -20,7 +19,7 @@ const authenticateToken = async (req, res, next) => {
 
   const token = tokenParts[1];
   console.log('Extracted token:', token);
-  console.log('tokenParts:', tokenParts);  // Add this log after defining 'token'
+  console.log('tokenParts:', tokenParts); 
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);

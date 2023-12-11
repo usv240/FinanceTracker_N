@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'your-secret-key';
-const REFRESH_SECRET_KEY = 'your-refresh-secret-key';
+const SECRET_KEY = 'ujwal';
+const REFRESH_SECRET_KEY = 'ujwal_refresh';
 
 const generateAccessToken = (userData) => {
   return jwt.sign(userData, SECRET_KEY, { expiresIn: '10m', algorithm: 'HS256' });

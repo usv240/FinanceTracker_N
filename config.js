@@ -1,7 +1,7 @@
 // config.js
 module.exports = {
-  SECRET_KEY: 'your-secret-key',
-  apiUrl: 'http://localhost:5000', // Update this with your backend URL
+  SECRET_KEY: 'ujwal',
+  apiUrl: 'http://localhost:5000', 
   mysql: {
     host: 'nbadprojectfinal.cccnx8pptmin.us-east-1.rds.amazonaws.com',
     user: 'admin',

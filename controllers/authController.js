@@ -1,23 +1,13 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
-const authService = require('../token/token'); // Import authService
+const authService = require('../token/token'); 
 const config = require('../config');
 
-const SECRET_KEY = 'your-secret-key';
-const REFRESH_SECRET_KEY = 'your-refresh-secret-key'; // Use a different secret key for refresh tokens
+const SECRET_KEY = 'ujwal';
+const REFRESH_SECRET_KEY = 'ujwal_refresh'; 
 const saltRounds = 10;
 
-// const pool = mysql.createPool({
-//   host: 'nbadprojectfinal.cccnx8pptmin.us-east-1.rds.amazonaws.com',
-//   user: 'admin',
-//   password: 'abcde12345',
-//   database: 'sys',
-//   waitForConnections: true,
-//   connectionLimit: 10,
-//   queueLimit: 0
-// });
-//const pool = config.mysql;
 const pool = mysql.createPool(config.mysql);
 
 const authController = {
@@ -25,7 +15,6 @@ const authController = {
     try {
       const { username, password } = req.body;
 
-      // Fetch the user from the database based on the provided username
       const [users] = await pool.execute('SELECT * FROM users WHERE `Username` = ?', [username]);
 
       if (users.length === 0) {
@@ -34,20 +23,15 @@ const authController = {
 
       const user = users[0];
 
-      // Compare the provided password with the hashed password from the database
       const passwordMatch = await bcrypt.compare(password, user.Password);
 
       if (!passwordMatch) {
         return res.status(401).json({ message: 'Invalid username or password' });
       }
 
-      // Generate a JWT token for the user
       const token = jwt.sign({ id: user.id, username: user.Username }, SECRET_KEY, { expiresIn: '10m' });
 
-      // Generate a refresh token for the user
       const refreshToken = jwt.sign({ id: user.id, username: user.Username }, REFRESH_SECRET_KEY, { expiresIn: '5m' });
-      console.log('authController token', token);
-      console.log('authController refreshToken', refreshToken);
       res.json({ token, refreshToken });
     } catch (error) {
       console.error('Login error:', error);
@@ -58,8 +42,7 @@ const authController = {
   refreshAccessToken: async (req, res) => {
     try {
       const { refreshToken } = req.body;
-  
-      // Verify the refresh token
+
       const newAccessToken = authService.verifyRefreshToken(refreshToken);
   
       res.json({ accessToken: newAccessToken });
@@ -78,17 +61,14 @@ const authController = {
     try {
       const { username, password, fullName } = req.body;
 
-      // Check if the username already exists
       const [existingUsers] = await pool.execute('SELECT * FROM users WHERE `Username` = ?', [username]);
 
       if (existingUsers.length > 0) {
         return res.status(400).json({ message: 'Username already exists' });
       }
 
-      // Hash the password
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-      // Save the username, hashed password, and full name in the MySQL database
       await pool.execute('INSERT INTO users (`Fullname`, `Username`, `Password`) VALUES (?, ?, ?)', [fullName, username, hashedPassword]);
       res.json({ message: 'Registration successful' });
     } catch (error) {

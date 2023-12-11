@@ -3,7 +3,6 @@ const compression = require('compression');
 const mysql = require('mysql2/promise');
 const config = require('../config');
 
-//const pool = config.mysql;
 const pool = mysql.createPool(config.mysql);
 
 const budgetCapController = {
@@ -17,7 +16,6 @@ const budgetCapController = {
         return res.status(400).json({ message: 'Invalid input. Please provide valid data.' });
       }
 
-      // Check if the row already exists
       const [result] = await pool.execute(
         'INSERT INTO budgetcap (username, budgetname, budgetnumber, month) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE budgetnumber = ?',
         [username, budgetName, budgetNumber, selectedMonth, budgetNumber]
@@ -32,13 +30,12 @@ const budgetCapController = {
         };
 
         if (result.insertId !== undefined) {
-          console.log('New Budget Capacity:', updatedBudgetCap);
           res.status(201).json({ message: 'Budget capacity added successfully', updatedBudgetCap });
         } else if (result.affectedRows > 0) {
-          console.log('Updated Budget Capacity:', updatedBudgetCap);
+
           res.status(200).json({ message: 'Budget capacity updated successfully', updatedBudgetCap });
         } else {
-          console.error('No changes were made. Database error:', result);
+
           res.status(200).json({ message: 'No changes were made to the budget capacity.' });
         }
       } else {

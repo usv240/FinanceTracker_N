@@ -1,15 +1,13 @@
 // controllers/tests/authController.test.js
-
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const { app, server } = require('../../server'); // Adjust the path accordingly
+const { app, server } = require('../../server'); 
 const authController = require('../authController');
 
 chai.use(chaiHttp);
 
 describe('Auth Controller', () => {
   afterAll(() => {
-    // Close the server after tests
     server.close();
   });
 

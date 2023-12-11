@@ -7,15 +7,14 @@ const pool = mysql.createPool(config.mysql);
 const budgetController = {
   getAllBudgets: async (req, res) => {
     try {
-      console.log('Inside getAllBudgets function'); // Add this line
+      console.log('Inside getAllBudgets function'); 
 
       const username = req.user.username;
       const { month } = req.params;
-      //console.log('req in getallbudgets:', req);
+
       let query;
       let queryParams = [username];
-      //console.log('Query Parameters:', queryParams);
-      //console.log('month', month);
+
       query = 'SELECT budgetname, SUM(budgetnumber) as budgetnumber FROM budget WHERE username = ?';
       if (month) {
         queryParams.push(parseInt(month, 10));
@@ -23,17 +22,11 @@ const budgetController = {
       }
       query += ' GROUP BY budgetname ORDER BY budgetname ASC';
 
-
-      console.log('SQL Query22222:', query);
-      console.log('Query Parameters:', queryParams);
-
       const [budgets] = await pool.execute(query, queryParams);
 
       if (!budgets || !budgets.length) {
         return res.status(200).json({ message: 'No budget data available.' });
       }
-
-      console.log(budgets);
       res.status(200).json({ data: budgets });
     } catch (error) {
       console.error('Error in getAllBudgets:', error);
@@ -45,17 +38,13 @@ const budgetController = {
     try {
       const { budgetName, budgetNumber, selectedDate } = req.body;
       const username = req.user.username;
-  
-      // Add a null check before inserting data
+
       if (!budgetName || !budgetNumber || !selectedDate) {
         return res.status(400).json({ message: 'Budget name, budget number, and date are required' });
       }
-  
-      // Add your additional logic here
-  
-      // Get the current timestamp (you can use selectedDate directly if it's in the desired format)
+
       const currentDate = new Date(selectedDate).toISOString().slice(0, 19).replace('T', ' ');
-      console.log('currentDate',currentDate);
+
       await pool.execute(
         'INSERT INTO budget (username, budgetname, budgetnumber, date) VALUES (?, ?, ?, ?)',
         [username, budgetName, budgetNumber, currentDate]
