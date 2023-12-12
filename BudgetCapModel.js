@@ -1,6 +1,6 @@
 // models/BudgetCapModel.js
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config');
+const sequelize = require('./config');
 
 const BudgetCap = sequelize.define('budgetCap', {
   username: {

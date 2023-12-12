@@ -1,12 +1,12 @@
 // authRoutes.js
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/authController');
+const authController = require('./authController');
 const authenticateToken = require('../middleware/authMiddleware');
-const token = require('./../token/token');
+const token = require('../token/token');
 
-router.post('/login', authController.login);
-router.post('/register', authController.register);
+router.post('/logingin', authController.login);
+router.post('/registering', authController.register);
 router.get('/refreshAccessToken', authController.refreshAccessToken);
 
 router.get('/protected', (req, res, next) => {

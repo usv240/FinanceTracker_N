@@ -3,8 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const compression = require('compression');
-const authRoutes = require('./routes/authRoutes');
-const budgetRoutes = require('./routes/budgetRoutes');
+const authRoutes = require('./authRoutes');
+const budgetRoutes = require('./budgetRoutes');
 const port = 5000;
 const app = express();
 

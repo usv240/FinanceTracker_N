@@ -2,7 +2,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const { app, server } = require('../../server'); 
-const authController = require('../authController');
+const authController = require('../../authController');
 
 chai.use(chaiHttp);
 
@@ -14,7 +14,7 @@ describe('Auth Controller', () => {
   describe('Login', () => {
     it('should return a token and refresh token for valid credentials', async () => {
       const res = await chai.request(app)
-        .post('/login')
+        .post('/logingin')
         .set('Content-Type', 'application/json')
         .send({ username: 'admin', password: 'password' });
 
@@ -24,7 +24,7 @@ describe('Auth Controller', () => {
 
     it('should return an error for invalid username', async () => {
       const res = await chai.request(app)
-        .post('/login')
+        .post('/logingin')
         .set('Content-Type', 'application/json')
         .send({ username: 'invalid', password: 'password' });
 
@@ -34,7 +34,7 @@ describe('Auth Controller', () => {
 
     it('should return an error for invalid password', async () => {
       const res = await chai.request(app)
-        .post('/login')
+        .post('/logingin')
         .set('Content-Type', 'application/json')
         .send({ username: 'admin', password: 'wrongpassword' });
 
@@ -46,7 +46,7 @@ describe('Auth Controller', () => {
   describe('Register', () => {
     it('should register a new user with valid credentials', async () => {
       const res = await chai.request(app)
-        .post('/register')
+        .post('/registering')
         .set('Content-Type', 'application/json')
         .send({ username: 'newuser', password: 'newpassword' });
 
@@ -56,7 +56,7 @@ describe('Auth Controller', () => {
 
     it('should return an error for existing username', async () => {
       const res = await chai.request(app)
-        .post('/register')
+        .post('/registering')
         .set('Content-Type', 'application/json')
         .send({ username: 'admin', password: 'password' });
 

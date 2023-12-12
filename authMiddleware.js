@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { refreshAccessToken } = require('../token/token');
-const { SECRET_KEY } = require('../config');
+const { SECRET_KEY } = require('./config');
 
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.header('Authorization');

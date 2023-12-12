@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
-const authService = require('../token/token'); 
-const config = require('../config');
+const authService = require('./token'); 
+const config = require('./config');
 
 const SECRET_KEY = 'ujwal';
 const REFRESH_SECRET_KEY = 'ujwal_refresh'; 

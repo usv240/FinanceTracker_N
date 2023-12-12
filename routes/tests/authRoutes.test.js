@@ -16,14 +16,14 @@ describe('Auth Routes', () => {
     jest.clearAllMocks();
   });
 
-  describe('POST /auth/login', () => {
+  describe('POST /auth/logingin', () => {
     it('should call authController.login', async () => {
       const reqBody = { /* your request body data here */ };
       const expectedResponse = { /* your expected response data here */ };
 
       authController.login.mockResolvedValue(expectedResponse);
 
-      const response = await request(app).post('/auth/login').send(reqBody);
+      const response = await request(app).post('/auth/logingin').send(reqBody);
 
       expect(authController.login).toHaveBeenCalledWith(reqBody);
       expect(response.status).toBe(200);
@@ -31,14 +31,14 @@ describe('Auth Routes', () => {
     });
   });
 
-  describe('POST /auth/register', () => {
+  describe('POST /auth/registering', () => {
     it('should call authController.register', async () => {
       const reqBody = { /* your request body data here */ };
       const expectedResponse = { /* your expected response data here */ };
 
       authController.register.mockResolvedValue(expectedResponse);
 
-      const response = await request(app).post('/auth/register').send(reqBody);
+      const response = await request(app).post('/auth/registering').send(reqBody);
 
       expect(authController.register).toHaveBeenCalledWith(reqBody);
       expect(response.status).toBe(200);
